@@ -2,7 +2,7 @@
 
 var React = window.React = require('react'),
     Timer = require("./ui/Timer"),
-    mountNode = document.getElementById("page-content-wrapper");
+    mountNode = document.getElementById("home");
 
 var TodoList = React.createClass({
   render: function() {
@@ -12,6 +12,7 @@ var TodoList = React.createClass({
     return <ul>{this.props.items.map(createItem)}</ul>;
   }
 });
+
 var TodoApp = React.createClass({
   getInitialState: function() {
     return {items: [], text: ''};
