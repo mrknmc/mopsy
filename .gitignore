@@ -1,7 +1,24 @@
 # Created by https://www.gitignore.io
 
+### SublimeText ###
+# cache files for sublime text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+
+# workspace files are user-specific
+*.sublime-workspace
+
+# project files should be checked into the repository, unless a significant
+# proportion of contributors will probably not be using SublimeText
+# *.sublime-project
+
+# sftp configuration file
+sftp-config.json
+
+
 ### Bower ###
-bower_components
+app/bower_components
 
 
 ### Node ###
@@ -35,18 +52,9 @@ node_modules
 .lock-wscript
 
 
-### SublimeText ###
-# cache files for sublime text
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
+### Sass ###
+.sass-cache
 
-# workspace files are user-specific
-*.sublime-workspace
 
-# project files should be checked into the repository, unless a significant
-# proportion of contributors will probably not be using SublimeText
-# *.sublime-project
-
-# sftp configuration file
-sftp-config.json
+### dist ###
+dist/

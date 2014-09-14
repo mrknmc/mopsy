@@ -1,32 +1,11 @@
 {
   "name": "mopsy",
-  "main": "index.js",
-  "version": "0.0.0",
-  "homepage": "https://github.com/mrknmc/mopsy",
-  "authors": [
-    "Mark Nemec <mrknmc@me.com>"
-  ],
-  "description": "My theme for mopidy.",
-  "license": "MIT",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
+  "version": "0.0.1",
   "dependencies": {
-    "jquery": "~2.1.1",
-    "backbone": "~1.1.2",
-    "bootstrap": "~3.2.0"
-  },
-  "devDependencies": {
-  },
-  "overrides": {
-    "BOWER-PACKAGE": {
-      "development": "bootstrap/dist/css/bootstrap.min.js",
-      "production": "file.min.js"
-    }
+    "jquery": "~2.1.0",
+    "react": "^0.10.0",
+    "bootstrap-sass-official": "^3.1.1",
+    "modernizr": "^2.8.3"
   }
 }
+
