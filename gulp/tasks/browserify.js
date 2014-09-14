@@ -12,15 +12,18 @@ var bundleLogger = require('../util/bundleLogger');
 var gulp         = require('gulp');
 var handleErrors = require('../util/handleErrors');
 var source       = require('vinyl-source-stream');
+var reactify     = require('reactify');
 
 gulp.task('browserify', function() {
   var bundler = browserify({
+    // Apply React transform
+    // transform: ['reactify'],
     // Required watchify args
     cache: {}, packageCache: {}, fullPaths: true,
     // Specify the entry point of your app
-    entries: ['./src/javascript/app.coffee'],
+    entries: ['./src/js/main.js'],
     // Add file extentions to make optional in your requires
-    extensions: ['.coffee', '.hbs'],
+    extensions: ['.js', '.jsx'],
     // Enable source maps!
     debug: true
   });
@@ -36,7 +39,7 @@ gulp.task('browserify', function() {
       // Use vinyl-source-stream to make the
       // stream gulp compatible. Specifiy the
       // desired output filename here.
-      .pipe(source('app.js'))
+      .pipe(source('bundle.js'))
       // Specify the output destination
       .pipe(gulp.dest('./build/'))
       // Log when bundling completes!
