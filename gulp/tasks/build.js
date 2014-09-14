@@ -1,4 +1,4 @@
 var gulp = require('gulp');
 
 
-gulp.task('build', ['html', 'bundle', 'images']);
+gulp.task('build', ['html', 'jade', 'bundle', 'images']);
