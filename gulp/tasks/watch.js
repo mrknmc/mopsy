@@ -9,7 +9,7 @@ gulp.task('connect', connect.server({
 }));
 
 
-gulp.task('watch', ['html', 'bundle', 'connect'], function () {
+gulp.task('watch', ['clean', 'build', 'connect'], function () {
 
     // Watch .json files
     gulp.watch('app/scripts/**/*.json', ['json']);
