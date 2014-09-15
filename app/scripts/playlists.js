@@ -6,7 +6,6 @@ var mopidy = require('./mopidyService');
 
 var PlaylistElement = React.createClass({
     render: function() {
-        // var onClick = this.props.handleClick.bind(this, this.props.playlist);
         var handleClick = this.props.handleClick;
         var pl = this.props.playlist;
         var onClick = function() {
@@ -42,7 +41,7 @@ var PlaylistList = React.createClass({
     },
     componentWillMount: function() {
         var list = this;
-        this.props.playlists
+        mopidy.playlists.getPlaylists()
         .catch(console.error.bind(console))
         .done(function(value) {
             list.setState({playlists: value});
