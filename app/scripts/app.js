@@ -48,7 +48,6 @@ var TodoApp = React.createClass({
 
 var Playlists = React.createClass({
     render: function() {
-
         return (
             <div>
                 <div className="page-header">

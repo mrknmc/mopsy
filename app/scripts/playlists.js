@@ -2,7 +2,6 @@
 
 var React = require('react');
 var mopidy = require('./mopidyService');
-var mountNode = document.getElementById("playlists");
 
 
 var PlaylistElement = React.createClass({
@@ -14,7 +13,7 @@ var PlaylistElement = React.createClass({
             console.log('clicky clack');
             var t = handleClick(pl);
             console.log(t);
-        }
+        };
 
         var tracks = this.props.playlist.tracks;
         var disabled = tracks === undefined;
@@ -27,7 +26,7 @@ var PlaylistElement = React.createClass({
             length = tracks.length;
         }
         return (
-            <a className={classes} href="#" onClick={onClick}>
+            <a className={classes} href='#' onClick={onClick}>
                 <span className='badge'>{length}</span>
                 <span className='glyphicon glyphicon-play'></span>
                 {this.props.playlist.name}
@@ -50,35 +49,11 @@ var PlaylistList = React.createClass({
         });
     },
     handleClick: function(playlist) {
-        var track = playlist.tracks[0];
-        return mopidy.playback.stop({'clear_current_track': true}).then(
-            function() {
-                mopidy.tracklist.clear()
-            },
-            console.error.bind(console)
-        ).then(
-            function() {
-                return mopidy.tracklist.add({'tracks':playlist.tracks});
-            },
-            console.error.bind(console)
-        ).then(
-            function() {
-                mopidy.tracklist.getTlTracks().then(
-                    function(tlTracks) {
-                        var tlTrackToPlay = _.find(tlTracks, function(tlTrack) {
-                            return tlTrack.track.uri === track.uri;
-                        });
-                        return mopidy.playback.changeTrack({'tl_track': tlTrackToPlay});
-                    }
-                );
-            },
-            console.error.bind(console)
-        ).then(
-            function() {
-                return mopidy.playback.play();
-            },
-            console.error.bind(console)
-        );
+        return mopidy.tracklist.clear().then(function() {
+            mopidy.tracklist.add(playlist.tracks).then(function (tlTracks) {
+                return mopidy.playback.play(tlTracks[0]);
+            });
+        });
     },
     render: function() {
         var handleClick = this.handleClick;
@@ -86,7 +61,7 @@ var PlaylistList = React.createClass({
             return <PlaylistElement playlist={playlist} key={playlist.uri} handleClick={handleClick} />;
         };
 
-        return <div className="list-group">{this.state.playlists.map(createPlaylist)}</div>;
+        return <div className='list-group'>{this.state.playlists.map(createPlaylist)}</div>;
     }
 });
 
