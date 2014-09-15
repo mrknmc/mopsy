@@ -1,8 +1,11 @@
 /** @jsx React.DOM */
 
-var React = window.React = require('react'),
-    Timer = require("./ui/Timer"),
-    mountNode = document.getElementById("home");
+var Mopidy = require('mopidy');
+var React = window.React = require('react');
+
+var Timer = require("./ui/Timer");
+var PlaylistList = require('./playlists');
+
 
 var TodoList = React.createClass({
   render: function() {
@@ -12,6 +15,7 @@ var TodoList = React.createClass({
     return <ul>{this.props.items.map(createItem)}</ul>;
   }
 });
+
 
 var TodoApp = React.createClass({
   getInitialState: function() {
@@ -42,5 +46,33 @@ var TodoApp = React.createClass({
 });
 
 
-React.renderComponent(<TodoApp />, mountNode);
+var Playlists = React.createClass({
+    render: function() {
 
+        var handleClick = function(uri) {
+            return mopidy.tracklist.clear({}).then(function(data) {
+                return mopidy.tracklist.add({"tracks":null, "at_position":null, "uri":uri});
+            }, console.error.bind(console));
+        };
+
+        return (
+            <div>
+                <div className="page-header">
+                    <h1>Playlists</h1>
+                </div>
+                <PlaylistList playlists={mopidy.playlists.getPlaylists()} handleClick={handleClick} />
+            </div>
+        )
+    }
+});
+
+
+var init = function() {
+    React.renderComponent(<TodoApp />, document.getElementById("home"));
+    React.renderComponent(<Playlists />, document.getElementById("playlists"));
+}
+
+
+var mopidy = new Mopidy();             // Connect to server
+mopidy.on(console.log.bind(console));  // Log all events
+mopidy.on('state:online', init);
