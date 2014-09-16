@@ -34,7 +34,7 @@ var PlayControls = React.createClass({
     render: function() {
         var playClass = this.state.playing ? 'glyphicon glyphicon-pause' : 'glyphicon glyphicon-play';
         return (
-            <div className='btn-group btn-group-lg pull-left'>
+            <div className='btn-group play-controls'>
                 <button type='button' className='btn btn-default' onClick={this.onBackwardClick}>
                     <span className='glyphicon glyphicon-backward'></span>
                 </button>
@@ -93,11 +93,11 @@ var PlayInfo = React.createClass({
         var remainderSeconds = (trackLength / 1000) - (60 * minutes);
         return (
             <div>
-                <span className='center-block' style={{'text-align': 'center'}}>
+                <span className='track-info'>
                     <a href="#">{artistName}</a> — <a href="#">{trackName}</a>
                 </span>
-                <span className='pull-left'>0:00</span>
-                <span className='pull-right'>{minutes + ':' + remainderSeconds}</span>
+                <span className='pull-left' style={{'margin-right': '13px'}}>0:00</span>
+                <span className='pull-right' style={{'margin-left': '13px'}}>{minutes + ':' + remainderSeconds}</span>
                 <div className='progress'>
                     <div className='progress-bar progress-bar-striped active'  role='progressbar' aria-valuenow={this.state.timePosition} aria-valuemin='0' aria-valuemax={trackLength} style={style}>
                     </div>
