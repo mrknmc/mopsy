@@ -5,6 +5,7 @@ var React = window.React = require('react');
 
 var Timer = require("./ui/Timer");
 var PlaylistList = require('./playlists');
+var NowPlaying = require('./nowPlaying');
 
 
 var TodoList = React.createClass({
@@ -53,5 +54,7 @@ var init = function() {
         playlistList.fetchPlaylists();
     });
 }
+
+React.renderComponent(<NowPlaying />, document.getElementById("nowplaying"));
 
 mopidy.on('state:online', init);
