@@ -1,7 +1,19 @@
 var Mopidy = require('mopidy');
 
+var MopidyService = function() {
+    Mopidy.call(this);
+    this.on(console.log.bind(console));
+};
 
-var mopidy = new Mopidy();             // Connect to server
-mopidy.on(console.log.bind(console));  // Log all events
+MopidyService.prototype = new Mopidy;
 
-module.exports = mopidy
+MopidyService.prototype.playPlaylist = function(playlist) {
+    var mopidy = this;
+    mopidy.tracklist.clear().then(function() {
+        mopidy.tracklist.add(playlist.tracks).then(function (tlTracks) {
+            return mopidy.playback.play(tlTracks[0]);
+        });
+    })
+};
+
+module.exports = new MopidyService();

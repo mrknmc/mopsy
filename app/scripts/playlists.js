@@ -34,12 +34,7 @@ var PlaylistList = React.createClass({
     },
     handleClick: function(playlist) {
         this.setState({'active': playlist.uri})
-
-        return mopidy.tracklist.clear().then(function() {
-            mopidy.tracklist.add(playlist.tracks).then(function (tlTracks) {
-                return mopidy.playback.play(tlTracks[0]);
-            });
-        });
+        return mopidy.playPlaylist(playlist);
     },
     fetchPlaylists: function() {
         var list = this;

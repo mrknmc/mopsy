@@ -8,12 +8,25 @@ var PlayControls = React.createClass({
     getInitialState: function() {
         return {'playing': false};
     },
-    onPlayPauseClick: function() {
+    componentWillMount: function() {
+        var ctrls = this;
+        mopidy.playback.getState().then(function(state) {
+            ctrls.setState({'playing': state === 'playing'});
+        });
+    },
+    onTogglePlay: function() {
         this.setState({'playing': !this.state.playing});
+        if (this.state.playing) {
+            mopidy.playback.pause();
+        } else {
+            mopidy.playback.play();
+        }
     },
     onBackwardClick: function() {
+        mopidy.playback.previous();
     },
     onForwardClick: function() {
+        mopidy.playback.next();
     },
     render: function() {
         var playClass = this.state.playing ? 'glyphicon glyphicon-pause' : 'glyphicon glyphicon-play';
@@ -22,7 +35,7 @@ var PlayControls = React.createClass({
                 <button type="button" className="btn btn-default" onClick={this.onBackwardClick}>
                     <span className="glyphicon glyphicon-backward"></span>
                 </button>
-                <button type="button" className="btn btn-default" onClick={this.onPlayPauseClick}>
+                <button type="button" className="btn btn-default" onClick={this.onTogglePlay}>
                     <span className={playClass}></span>
                 </button>
                 <button type="button" className="btn btn-default" onClick={this.onForwardClick}>
