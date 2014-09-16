@@ -1,6 +1,16 @@
 {
   "name": "mopsy",
   "version": "0.0.0",
+  "description": "My HTTP Client for Mopidy.",
+  "author": "Mark Nemec <mrknmc@me.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrknmc/mopsy"
+  },
+  "bugs": {
+    "url": "https://github.com/mrknmc/mopsy/issues"
+  },
+  "private": true,
   "dependencies": {
     "mopidy": "^0.4.1",
     "underscore": "^1.7.0"
