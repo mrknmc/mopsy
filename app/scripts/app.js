@@ -48,9 +48,10 @@ var TodoApp = React.createClass({
 
 var init = function() {
     React.renderComponent(<TodoApp />, document.getElementById("home"));
+    var playlistList = React.renderComponent(<PlaylistList />, document.getElementById("playlists-list"));
+    mopidy.on('event:playlistsLoaded', function() {
+        playlistList.fetchPlaylists();
+    });
 }
 
 mopidy.on('state:online', init);
-mopidy.on('event:playlistsLoaded', function() {
-    React.renderComponent(<PlaylistList />, document.getElementById("playlists-list"));
-});

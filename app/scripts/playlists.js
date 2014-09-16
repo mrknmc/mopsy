@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var _ = require('underscore');
 var mopidy = require('./mopidyService');
 
 
@@ -9,9 +10,7 @@ var PlaylistElement = React.createClass({
         var handleClick = this.props.handleClick;
         var pl = this.props.playlist;
         var onClick = function() {
-            console.log('clicky clack');
             var t = handleClick(pl);
-            console.log(t);
         };
 
         var tracks = this.props.playlist.tracks;
@@ -37,15 +36,7 @@ var PlaylistElement = React.createClass({
 
 var PlaylistList = React.createClass({
     getInitialState: function() {
-        return {playlists: []};
-    },
-    componentWillMount: function() {
-        var list = this;
-        mopidy.playlists.getPlaylists()
-        .catch(console.error.bind(console))
-        .done(function(value) {
-            list.setState({playlists: value});
-        });
+        return {'playlists': []};
     },
     handleClick: function(playlist) {
         return mopidy.tracklist.clear().then(function() {
@@ -54,12 +45,25 @@ var PlaylistList = React.createClass({
             });
         });
     },
+    fetchPlaylists: function() {
+        var list = this;
+        mopidy.playlists.getPlaylists().then(function(playlists) {
+            // filter out ones without tracks
+            var pls = _.filter(playlists, list.hasTracks);
+            list.setState({'playlists': pls});
+        });
+    },
+    componentWillMount: function() {
+        this.fetchPlaylists();
+    },
+    hasTracks: function(playlist) {
+        return playlist.tracks !== undefined;
+    },
     render: function() {
         var handleClick = this.handleClick;
         var createPlaylist = function(playlist) {
-            return <PlaylistElement playlist={playlist} key={playlist.uri} handleClick={handleClick} />;
-        };
-
+            return <PlaylistElement playlist={playlist} key={playlist.uri} handleClick={handleClick} />
+        }
         return <div className='list-group'>{this.state.playlists.map(createPlaylist)}</div>;
     }
 });
