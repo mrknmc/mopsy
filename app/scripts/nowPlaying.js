@@ -52,7 +52,7 @@ var PlayControls = React.createClass({
 
 var PlayInfo = React.createClass({
     getInitialState: function() {
-        return {'tlTrack': null, 'timePosition': 50};
+        return {'tlTrack': null, 'timePosition': 0};
     },
     componentWillMount: function() {
         var info = this;
@@ -78,6 +78,7 @@ var PlayInfo = React.createClass({
     },
     render: function() {
         var tlTrack = this.state.tlTrack;
+        var timePosition = this.state.timePosition;
         var artistName = '';
         var trackName = '';
         var trackLength = 0;
@@ -89,17 +90,19 @@ var PlayInfo = React.createClass({
         }
         var width = trackLength == 0 ? 0 : (this.state.timePosition / trackLength) * 100;
         var style = {'width': width + '%'};
-        var minutes = Math.floor(trackLength / 60000);
-        var remainderSeconds = (trackLength / 1000) - (60 * minutes);
+        var minutes1 = Math.floor(timePosition / 60000);
+        var remainderSeconds1 = Math.round((timePosition / 1000) - (60 * minutes1));
+        var minutes2 = Math.floor(trackLength / 60000);
+        var remainderSeconds2 = Math.round((trackLength / 1000) - (60 * minutes2));
         return (
             <div>
                 <span className='track-info'>
                     <a href="#">{artistName}</a> — <a href="#">{trackName}</a>
                 </span>
-                <span className='pull-left' style={{'margin-right': '13px'}}>0:00</span>
-                <span className='pull-right' style={{'margin-left': '13px'}}>{minutes + ':' + remainderSeconds}</span>
+                <span className='pull-left' style={{'margin-right': '13px'}}>{minutes1 + ':' + remainderSeconds1}</span>
+                <span className='pull-right' style={{'margin-left': '13px'}}>{minutes2 + ':' + remainderSeconds2}</span>
                 <div className='progress'>
-                    <div className='progress-bar progress-bar-striped active'  role='progressbar' aria-valuenow={this.state.timePosition} aria-valuemin='0' aria-valuemax={trackLength} style={style}>
+                    <div className='progress-bar'  role='progressbar' aria-valuenow={timePosition} aria-valuemin='0' aria-valuemax={trackLength} style={style}>
                     </div>
                 </div>
             </div>
