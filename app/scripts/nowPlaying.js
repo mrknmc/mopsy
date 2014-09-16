@@ -47,10 +47,42 @@ var PlayControls = React.createClass({
 });
 
 
+var PlayInfo = React.createClass({
+    getInitialState: function() {
+        return {'tlTrack': null};
+    },
+    componentWillMount: function() {
+        var info = this;
+        mopidy.playback.getCurrentTlTrack().then(function(tlTrack) {
+            info.setState({'tlTrack': tlTrack});
+        });
+    },
+    playbackStarted: function(tlTrack) {
+        info.setState({'tlTrack': tlTrack});
+    },
+    render: function() {
+        var tlTrack = this.state.tlTrack;
+        var artistName = '';
+        var trackName = '';
+        if (tlTrack !== null) {
+            var track = tlTrack.track;
+            var artistName = track.artists[0].name;
+            var trackName = track.name;
+        }
+        return (
+            <span><a>{artistName}</a>' — '<a>{trackName}</a></span>
+        );
+    }
+});
+
+
 var NowPlaying = React.createClass({
     render: function() {
         return (
-            <PlayControls />
+            <div className='container'>
+                <PlayControls />
+                <PlayInfo />
+            </div>
         );
     }
 });
