@@ -4,7 +4,7 @@ var React = require('react');
 var mopidy = require('./mopidyService');
 
 
-var LeftControls = React.createClass({
+var PlayControls = React.createClass({
     getInitialState: function() {
         return {'playing': false};
     },
@@ -19,13 +19,13 @@ var LeftControls = React.createClass({
         var playClass = this.state.playing ? 'glyphicon glyphicon-pause' : 'glyphicon glyphicon-play';
         return (
             <div className='btn-group btn-group-lg'>
-                <button type="button" className="btn btn-default">
+                <button type="button" className="btn btn-default" onClick={this.onBackwardClick}>
                     <span className="glyphicon glyphicon-backward"></span>
                 </button>
                 <button type="button" className="btn btn-default" onClick={this.onPlayPauseClick}>
                     <span className={playClass}></span>
                 </button>
-                <button type="button" className="btn btn-default">
+                <button type="button" className="btn btn-default" onClick={this.onForwardClick}>
                     <span className="glyphicon glyphicon-forward"></span>
                 </button>
             </div>
@@ -37,7 +37,7 @@ var LeftControls = React.createClass({
 var NowPlaying = React.createClass({
     render: function() {
         return (
-            <LeftControls />
+            <PlayControls />
         );
     }
 });
