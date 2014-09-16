@@ -2,7 +2,6 @@ var gulp = require('gulp');
 var imagemin = require('gulp-imagemin');
 var cache = require('gulp-cache');
 var size = require('gulp-size');
-var connect = require('gulp-connect');
 
 
 gulp.task('images', function () {
@@ -13,6 +12,5 @@ gulp.task('images', function () {
             interlaced: true
         })))
         .pipe(gulp.dest('dist/images'))
-        .pipe(size())
-        .pipe(connect.reload());
+        .pipe(size());
 });

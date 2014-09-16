@@ -1,27 +1,16 @@
 var gulp = require('gulp');
 
 
-gulp.task('watch', ['clean', 'build', 'connect'], function () {
-
-    // Watch .json files
-    gulp.watch('app/scripts/**/*.json', ['json']);
-
-    // Watch .html files
-    gulp.watch('app/*.html', ['html']);
-
+gulp.task('watch', ['rimraf', 'build'], function () {
 
     // Watch .scss files
     gulp.watch('app/styles/**/*.scss', ['styles']);
 
-
     // Watch .jade files
-    gulp.watch('app/template/**/*.jade', ['jade', 'html']);
-
-
+    gulp.watch(['app/template/**/*.jade', 'app/index.jade'], ['jade']);
 
     // Watch .coffeescript files
     gulp.watch('app/scripts/**/*.coffee', ['coffee', 'scripts']);
-
 
     // Watch .js files
     gulp.watch('app/scripts/**/*.js', ['scripts']);

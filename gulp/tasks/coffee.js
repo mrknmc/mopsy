@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var coffee = require('gulp-coffee');
 var util = require('gulp-util');
+var handleErrors = require('../util/handleErrors');
 
 
 gulp.task('coffee', function () {
@@ -8,8 +9,7 @@ gulp.task('coffee', function () {
             ['app/scripts/**/*.coffee', '!app/scripts/**/*.js'],
             {base: 'app/scripts'}
         )
-        .pipe(
-            coffee({ bare: true }).on('error', util.log)
-        )
+        .pipe(coffee({bare: true}))
+        .on('error', handleErrors)
         .pipe(gulp.dest('app/scripts'));
 });
