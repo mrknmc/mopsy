@@ -7,21 +7,15 @@ var mopidy = require('./mopidyService');
 
 var PlaylistElement = React.createClass({
     render: function() {
-        var handleClick = this.props.handleClick;
-        var pl = this.props.playlist;
+        var elem = this;
         var onClick = function() {
-            var t = handleClick(pl);
+            elem.props.handleClick(elem.props.playlist);
         };
 
-        var tracks = this.props.playlist.tracks;
-        var disabled = tracks === undefined;
+        var length = this.props.playlist.tracks.length;
         var classes = 'list-group-item';
-        var length;
-        if (disabled) {
-            length = 0;
-            classes += ' disabled';
-        } else {
-            length = tracks.length;
+        if (this.props.active) {
+            classes += ' active';
         }
         return (
             <a className={classes} href='#' onClick={onClick}>
@@ -36,9 +30,11 @@ var PlaylistElement = React.createClass({
 
 var PlaylistList = React.createClass({
     getInitialState: function() {
-        return {'playlists': []};
+        return {'playlists': [], 'active': null};
     },
     handleClick: function(playlist) {
+        this.setState({'active': playlist.uri})
+
         return mopidy.tracklist.clear().then(function() {
             mopidy.tracklist.add(playlist.tracks).then(function (tlTracks) {
                 return mopidy.playback.play(tlTracks[0]);
@@ -60,9 +56,10 @@ var PlaylistList = React.createClass({
         return playlist.tracks !== undefined;
     },
     render: function() {
-        var handleClick = this.handleClick;
+        var list = this;
         var createPlaylist = function(playlist) {
-            return <PlaylistElement playlist={playlist} key={playlist.uri} handleClick={handleClick} />
+            var active = playlist.uri === list.state.active;
+            return <PlaylistElement playlist={playlist} key={playlist.uri} active={active} handleClick={list.handleClick} />
         }
         return <div className='list-group'>{this.state.playlists.map(createPlaylist)}</div>;
     }
