@@ -1,8 +1,10 @@
 doctype html
 html
-include ./template/head.jade
+  head
+    include ./template/head.jade
 body
-  include ./template/header.jade
+  .header
+    include ./template/header.jade
 
   ul.col-xs-2.nav.nav-pills.nav-stacked(role='tablist')
     li.active
@@ -12,12 +14,20 @@ body
     li
       a(href='#playlists', role='tab', data-toggle='pill') Playlists
 
-  .tab-content.col-xs-10
-    #home.tab-pane.active Home
-    #search.tab-pane Search
+  .main.tab-content.col-xs-10
+    #home.tab-pane.active
+      .page-header
+        h1 Home
+    #search.tab-pane
+      .page-header
+        h1 Search
     #playlists.tab-pane
       .page-header
         h1 Playlists
       #playlists-list
 
-  include ./template/footer.jade
+  .footer
+    .container
+      #nowplaying
+
+  include ./template/scripts.jade
