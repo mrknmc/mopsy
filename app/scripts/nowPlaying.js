@@ -4,6 +4,9 @@ var React = require('react');
 var mopidy = require('./mopidyService');
 
 
+var TIMEPOSITION_INTERVAL = 500;
+
+
 var PlayControls = React.createClass({
     getInitialState: function() {
         return {'playing': false};
@@ -31,15 +34,15 @@ var PlayControls = React.createClass({
     render: function() {
         var playClass = this.state.playing ? 'glyphicon glyphicon-pause' : 'glyphicon glyphicon-play';
         return (
-            <div className='btn-group btn-group-lg'>
-                <button type="button" className="btn btn-default" onClick={this.onBackwardClick}>
-                    <span className="glyphicon glyphicon-backward"></span>
+            <div className='btn-group btn-group-lg pull-left'>
+                <button type='button' className='btn btn-default' onClick={this.onBackwardClick}>
+                    <span className='glyphicon glyphicon-backward'></span>
                 </button>
-                <button type="button" className="btn btn-default" onClick={this.onTogglePlay}>
+                <button type='button' className='btn btn-default' onClick={this.onTogglePlay}>
                     <span className={playClass}></span>
                 </button>
-                <button type="button" className="btn btn-default" onClick={this.onForwardClick}>
-                    <span className="glyphicon glyphicon-forward"></span>
+                <button type='button' className='btn btn-default' onClick={this.onForwardClick}>
+                    <span className='glyphicon glyphicon-forward'></span>
                 </button>
             </div>
         );
@@ -49,28 +52,57 @@ var PlayControls = React.createClass({
 
 var PlayInfo = React.createClass({
     getInitialState: function() {
-        return {'tlTrack': null};
+        return {'tlTrack': null, 'timePosition': 50};
     },
     componentWillMount: function() {
         var info = this;
         mopidy.playback.getCurrentTlTrack().then(function(tlTrack) {
             info.setState({'tlTrack': tlTrack});
         });
+        this.updateTimePosition()
+    },
+    componentDidMount: function() {
+        this.interval = setInterval(this.updateTimePosition, TIMEPOSITION_INTERVAL);
+    },
+    componentWillUnmount: function() {
+        clearInterval(this.interval);
+    },
+    updateTimePosition: function() {
+        var info = this;
+        mopidy.playback.getTimePosition().then(function(position) {
+            info.setState({'timePosition': position});
+        });
     },
     playbackStarted: function(tlTrack) {
-        info.setState({'tlTrack': tlTrack});
+        this.setState({'tlTrack': tlTrack});
     },
     render: function() {
         var tlTrack = this.state.tlTrack;
         var artistName = '';
         var trackName = '';
+        var trackLength = 0;
         if (tlTrack !== null) {
-            var track = tlTrack.track;
-            var artistName = track.artists[0].name;
-            var trackName = track.name;
+            track = tlTrack.track;
+            artistName = track.artists[0].name;
+            trackName = track.name;
+            trackLength = track.length;
         }
+        var width = trackLength == 0 ? 0 : (this.state.timePosition / trackLength) * 100;
+        var style = {'width': width + '%'};
+        var minutes = Math.floor(trackLength / 60000);
+        var remainderSeconds = (trackLength / 1000) - (60 * minutes);
         return (
-            <span><a>{artistName}</a>' — '<a>{trackName}</a></span>
+            <div>
+                <span className='center-block' style={{'text-align': 'center'}}>
+                    <a href="#">{artistName}</a> — <a href="#">{trackName}</a>
+                </span>
+                <span className='pull-left'>0:00</span>
+                <span className='pull-right'>{minutes + ':' + remainderSeconds}</span>
+                <div className='progress'>
+                    <div className='progress-bar progress-bar-striped active'  role='progressbar' aria-valuenow={this.state.timePosition} aria-valuemin='0' aria-valuemax={trackLength} style={style}>
+                    </div>
+                </div>
+            </div>
         );
     }
 });
