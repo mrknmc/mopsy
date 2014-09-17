@@ -8,7 +8,6 @@ var NowPlaying = require('./nowPlaying');
 
 
 var init = function() {
-    React.renderComponent(<TodoApp />, document.getElementById("home"));
     React.renderComponent(<NowPlaying />, document.getElementById("nowplaying"));
     React.renderComponent(<PlaylistList />, document.getElementById("playlists-list"));
 }
