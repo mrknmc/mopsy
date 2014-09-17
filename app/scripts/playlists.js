@@ -47,6 +47,9 @@ var PlaylistList = React.createClass({
     componentWillMount: function() {
         this.fetchPlaylists();
     },
+    componentDidMount: function() {
+        mopidy.on('event:playlistsLoaded', this.fetchPlaylists());
+    },
     hasTracks: function(playlist) {
         return playlist.tracks !== undefined;
     },
