@@ -59,9 +59,9 @@ var PlayInfo = React.createClass({
         mopidy.playback.getCurrentTlTrack().then(function(tlTrack) {
             info.setState({'tlTrack': tlTrack});
         });
-        this.updateTimePosition()
     },
     componentDidMount: function() {
+        mopidy.on('event:trackPlaybackStarted', this.onTrackPlaybackStarted);
         this.interval = setInterval(this.updateTimePosition, TIMEPOSITION_INTERVAL);
     },
     componentWillUnmount: function() {
@@ -73,11 +73,12 @@ var PlayInfo = React.createClass({
             info.setState({'timePosition': position});
         });
     },
-    playbackStarted: function(tlTrack) {
-        this.setState({'tlTrack': tlTrack});
+    onTrackPlaybackStarted: function(playback) {
+        this.setState({'tlTrack': playback['tl_track'], 'timePosition': 0});
     },
     render: function() {
         var tlTrack = this.state.tlTrack;
+        var track;
         var timePosition = this.state.timePosition;
         var artistName = '';
         var trackName = '';
